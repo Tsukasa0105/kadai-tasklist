@@ -45,6 +45,10 @@ class TasksController < ApplicationController
     redirect_to tasks_url
   end
   
+  def index
+    @tasks = Task.order(id: :desc).page(params[:page]).per(3)
+  end
+  
   private
   
   def set_task
