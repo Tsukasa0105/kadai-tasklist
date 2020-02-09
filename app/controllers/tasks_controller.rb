@@ -4,7 +4,7 @@ class TasksController < ApplicationController
   before_action :correct_user, only: [:edit, :update, :destroy]
   
   def index
-      @tasks = Task.all
+    @tasks = current_user.tasks.order(id: :desc).page(params[:page])
   end
 
   def show
@@ -19,7 +19,7 @@ class TasksController < ApplicationController
 
     if @task.save
       flash[:success] = 'Task が正常に保存されました'
-      redirect_to @task
+      redirect_to root_url
     else
       flash.now[:danger] = 'Task が保存されませんでした'
       render :new
@@ -45,10 +45,6 @@ class TasksController < ApplicationController
 
     flash[:success] = 'Taskは正常に削除されました'
     redirect_to tasks_url
-  end
-  
-  def index
-    @tasks = Task.order(id: :desc).page(params[:page]).per(5)
   end
   
   private
